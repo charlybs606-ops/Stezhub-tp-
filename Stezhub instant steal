@@ -1,0 +1,203 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local CoreGui = game:GetService("CoreGui")
+local TextChatService = game:GetService("TextChatService")
+
+local player = Players.LocalPlayer
+
+local pos1 = Vector3.new(-352.98, -7, 74.30)
+local pos2 = Vector3.new(-352.98, -6.49, 45.76)
+local standing1 = Vector3.new(-336.36, -4.59, 99.51)
+local standing2 = Vector3.new(-334.81, -4.59, 18.90)
+
+local spot1_sequence = {
+CFrame.new(-370.810913, -7.00000334, 41.2687263, 0.99984771, 1.22364419e-09, 0.0174523517, -6.54859778e-10, 1, -3.2596418e-08, -0.0174523517, 3.25800258e-08, 0.99984771),
+CFrame.new(-336.355286, -5.10107088, 17.2327671, -0.999883354, -2.76150569e-08, 0.0152716246, -2.88224964e-08, 1, -7.88441525e-08, -0.0152716246, -7.9275118e-08, -0.999883354)
+}
+
+local spot2_sequence = {
+CFrame.new(-354.782867, -7.00000334, 92.8209305, -0.999997616, -1.11891862e-09, -0.00218066527, -1.11958298e-09, 1, 3.03415071e-10, 0.00218066527, 3.05855785e-10, -0.999997616),
+CFrame.new(-336.942902, -5.10106993, 99.3276443, 0.999914348, -3.63984611e-08, 0.0130875716, 3.67094941e-08, 1, -2.35254749e-08, -0.0130875716, 2.40038975e-08, 0.999914348)
+}
+
+if CoreGui:FindFirstChild("SilentHubGui") then
+CoreGui["SilentHubGui"]:Destroy()
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SilentHubGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = CoreGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 182, 0, 128) -- Taille minimale
+mainFrame.Position = UDim2.new(1, -197, 0.5, -64)
+mainFrame.AnchorPoint = Vector2.new(0, 0.5)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundTransparency = 0.1
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 8)
+
+local borderStroke = Instance.new("UIStroke")
+borderStroke.Thickness = 2
+borderStroke.Color = Color3.fromRGB(255, 50, 50)
+borderStroke.Transparency = 0.3
+borderStroke.Parent = mainFrame
+
+local titleContainer = Instance.new("Frame")
+titleContainer.Size = UDim2.new(1, 0, 0, 23)
+titleContainer.Position = UDim2.new(0, 0, 0, 3)
+titleContainer.BackgroundTransparency = 1
+titleContainer.Parent = mainFrame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 1, 0)
+title.BackgroundTransparency = 1
+title.Text = "STEZ HUB INSTANT STEAL"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 10
+title.Font = Enum.Font.GothamBlack
+title.TextStrokeTransparency = 0.3
+title.TextStrokeColor3 = Color3.fromRGB(255, 50, 50)
+title.Parent = titleContainer
+
+local subtitle = Instance.new("TextLabel")
+subtitle.Size = UDim2.new(1, 0, 0, 12)
+subtitle.Position = UDim2.new(0, 0, 0, 29)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "made by Charly & hugoaak"
+subtitle.TextColor3 = Color3.fromRGB(255, 200, 0)
+subtitle.TextSize = 8
+subtitle.Font = Enum.Font.GothamMedium
+subtitle.Parent = mainFrame
+
+local function ResetToWork()
+local flags = {
+{"GameNetPVHeaderRotationalVelocityZeroCutoffExponent", "-5000"},
+{"LargeReplicatorWrite5", "true"},
+{"LargeReplicatorEnabled9", "true"},
+{"AngularVelociryLimit", "360"},
+{"TimestepArbiterVelocityCriteriaThresholdTwoDt", "2147483646"},
+{"S2PhysicsSenderRate", "15000"},
+{"DisableDPIScale", "true"},
+{"MaxDataPacketPerSend", "2147483647"},
+{"ServerMaxBandwith", "52"},
+{"PhysicsSenderMaxBandwidthBps", "20000"},
+{"MaxTimestepMultiplierBuoyancy", "2147483647"},
+{"SimOwnedNOUCountThresholdMillionth", "2147483647"},
+{"MaxMissedWorldStepsRemembered", "-2147483648"},
+{"CheckPVDifferencesForInterpolationMinVelThresholdStudsPerSecHundredth", "1"},
+{"StreamJobNOUVolumeLengthCap", "2147483647"},
+{"DebugSendDistInSteps", "-2147483648"},
+{"MaxTimestepMultiplierAcceleration", "2147483647"},
+{"LargeReplicatorRead5", "true"},
+{"SimExplicitlyCappedTimestepMultiplier", "2147483646"},
+{"GameNetDontSendRedundantNumTimes", "1"},
+{"CheckPVLinearVelocityIntegrateVsDeltaPositionThresholdPercent", "1"},
+{"CheckPVCachedRotVelThresholdPercent", "10"},
+{"LargeReplicatorSerializeRead3", "true"},
+{"ReplicationFocusNouExtentsSizeCutoffForPauseStuds", "2147483647"},
+{"NextGenReplicatorEnabledWrite4", "true"},
+{"CheckPVDifferencesForInterpolationMinRotVelThresholdRadsPerSecHundredth", "1"},
+{"GameNetDontSendRedundantDeltaPositionMillionth", "1"},
+{"InterpolationFrameVelocityThresholdMillionth", "5"},
+{"StreamJobNOUVolumeCap", "2147483647"},
+{"InterpolationFrameRotVelocityThresholdMillionth", "5"},
+{"WorldStepMax", "30"},
+{"TimestepArbiterHumanoidLinearVelThreshold", "1"},
+{"InterpolationFramePositionThresholdMillionth", "5"},
+{"TimestepArbiterHumanoidTurningVelThreshold", "1"},
+{"MaxTimestepMultiplierContstraint", "2147483647"},
+{"GameNetPVHeaderLinearVelocityZeroCutoffExponent", "-5000"},
+{"CheckPVCachedVelThresholdPercent", "10"},
+{"TimestepArbiterOmegaThou", "1073741823"},
+{"MaxAcceptableUpdateDelay", "1"},
+{"LargeReplicatorSerializeWrite4", "true"},
+}
+for _, data in ipairs(flags) do pcall(function() if setfflag then setfflag(data[1], data[2]) end end) end
+local char = player.Character
+if char then
+local hum = char:FindFirstChildOfClass("Humanoid")
+if hum then hum:ChangeState(Enum.HumanoidStateType.Dead) end
+char:ClearAllChildren()
+local f = Instance.new("Model", workspace)
+player.Character = f task.wait()
+player.Character = char f:Destroy()
+end
+end
+
+task.spawn(function() task.wait(1) ResetToWork() end)
+
+local antiStealButton = Instance.new("TextButton")
+antiStealButton.Size = UDim2.new(0.9, 0, 0, 23)
+antiStealButton.Position = UDim2.new(0.05, 0, 0, 48) -- Remonté au premier emplacement
+antiStealButton.Text = "Auto tp Left"
+antiStealButton.Font = Enum.Font.GothamBold
+antiStealButton.TextSize = 9
+antiStealButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+antiStealButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+antiStealButton.Parent = mainFrame
+Instance.new("UICorner", antiStealButton).CornerRadius = UDim.new(0, 4)
+local aStroke = Instance.new("UIStroke", antiStealButton) aStroke.Color = Color3.fromRGB(255, 50, 50)
+
+local autoTpRightButton = Instance.new("TextButton")
+autoTpRightButton.Size = UDim2.new(0.9, 0, 0, 23)
+autoTpRightButton.Position = UDim2.new(0.05, 0, 0, 75)
+autoTpRightButton.Text = "Auto tp Right"
+autoTpRightButton.Font = Enum.Font.GothamBold
+autoTpRightButton.TextSize = 9
+autoTpRightButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+autoTpRightButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+autoTpRightButton.Parent = mainFrame
+Instance.new("UICorner", autoTpRightButton).CornerRadius = UDim.new(0, 4)
+local rStroke = Instance.new("UIStroke", autoTpRightButton) rStroke.Color = Color3.fromRGB(255, 200, 0)
+
+local bar = Instance.new("Frame")
+bar.Size = UDim2.new(0.9, 0, 0, 10)
+bar.Position = UDim2.new(0.05, 0, 0, 104)
+bar.BackgroundColor3 = Color3.fromRGB(25,25,25)
+bar.Parent = mainFrame
+Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
+
+local fill = Instance.new("Frame")
+fill.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+fill.Size = UDim2.new(0,0,1,0)
+fill.Parent = bar
+Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
+
+local dragging, dragStart, startPos
+mainFrame.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = true dragStart = input.Position startPos = mainFrame.Position end
+end)
+UserInputService.InputChanged:Connect(function(input)
+if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+local delta = input.Position - dragStart
+mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+end)
+UserInputService.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
+
+-- LOGIQUE SYSTEME CONSERVÉE
+local allAnimalsCache = {}
+local InternalStealCache = {}
+local IsStealing = false
+local StealProgress = 0
+local function getHRP() local char = player.Character return char and (char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("UpperTorso")) end
+local function isMyBase(plotName) local plot = workspace.Plots:FindFirstChild(plotName) return plot and plot:FindFirstChild("PlotSign") and plot.PlotSign:FindFirstChild("YourBase") and plot.PlotSign.YourBase.Enabled end
+local function scan() table.clear(allAnimalsCache) for _, p in ipairs(workspace.Plots:GetChildren()) do if not isMyBase(p.Name) and p:FindFirstChild("AnimalPodiums") then for _, pod in ipairs(p.AnimalPodiums:GetChildren()) do if pod:FindFirstChild("Base") then table.insert(allAnimalsCache, {plot=p.Name, slot=pod.Name, worldPosition=pod:GetPivot().Position, uid=p.Name.."_"..pod.Name}) end end end end end
+task.spawn(function() while task.wait(5) do scan() end end) scan()
+
+local function buildSteal(prompt) if InternalStealCache[prompt] then return end local d = {hold={}, trig={}, ready=true} local ok1, c1 = pcall(getconnections, prompt.PromptButtonHoldBegan) if ok1 then for _, c in ipairs(c1) do table.insert(d.hold, c.Function) end end local ok2, c2 = pcall(getconnections, prompt.Triggered) if ok2 then for _, c in ipairs(c2) do table.insert(d.trig, c.Function) end end InternalStealCache[prompt] = d end
+local function execSteal(prompt, animal, seq) buildSteal(prompt) local d = InternalStealCache[prompt] if not d or not d.ready or IsStealing then return end d.ready = false IsStealing = true StealProgress = 0 local tpDone = false task.spawn(function() for _, f in ipairs(d.hold) do task.spawn(f) end local s = tick() while tick()-s < 1.3 do StealProgress = (tick()-s)/1.3 if StealProgress >= 0.73 and not tpDone then tpDone = true local hrp = getHRP() if hrp then local b = player:FindFirstChild("Backpack") if b and b:FindFirstChild("Flying Carpet") then player.Character.Humanoid:EquipTool(b["Flying Carpet"]) task.wait(0.1) end hrp.CFrame = seq[1] task.wait(0.1) hrp.CFrame = seq[2] task.wait(0.2) local d1 = (hrp.Position-pos1).Magnitude local d2 = (hrp.Position-pos2).Magnitude hrp.CFrame = CFrame.new(d1<d2 and pos1 or pos2) end end task.wait() end for _, f in ipairs(d.trig) do task.spawn(f) end task.wait(0.2) d.ready=true IsStealing=false StealProgress=0 end) end
+
+antiStealButton.MouseButton1Click:Connect(function() local hrp = getHRP() if not hrp or IsStealing then return end scan() local target, dist = nil, 200 for _, a in ipairs(allAnimalsCache) do local d = (hrp.Position-a.worldPosition).Magnitude if d < dist then dist=d target=a end end if target then local p = workspace.Plots[target.plot].AnimalPodiums[target.slot].Base.Spawn.PromptAttachment:FindFirstChildOfClass("ProximityPrompt") if p then execSteal(p, target, spot1_sequence) end end end)
+autoTpRightButton.MouseButton1Click:Connect(function() local hrp = getHRP() if not hrp or IsStealing then return end scan() local target, dist = nil, 200 for _, a in ipairs(allAnimalsCache) do local d = (hrp.Position-a.worldPosition).Magnitude if d < dist then dist=d target=a end end if target then local p = workspace.Plots[target.plot].AnimalPodiums[target.slot].Base.Spawn.PromptAttachment:FindFirstChildOfClass("ProximityPrompt") if p then execSteal(p, target, spot2_sequence) end end end)
+task.spawn(function() while task.wait(0.02) do fill.Size = UDim2.new(math.clamp(StealProgress,0,1),0,1,0) end end)
